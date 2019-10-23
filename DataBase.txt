@@ -1,0 +1,180 @@
+UserStart
+UserInfoStart
+Username= liuyang
+Password= liuyang
+UserInfoEnd
+AccountStart
+SavingsAccountStart
+ID= 010
+Balance= 4061.81
+Rate= 0.015
+LastDate= 2020-1-1
+Accumulation= 0
+LogInfoStart
+Log= 2020-1-1 61.64 储蓄利息结算
+Log= 2020-1-1 0.17 储蓄利息结算
+Log= 2019-2-10 -1000 取款
+Log= 2019-1-1 5000 存款
+LogInfoEnd
+SavingsAccountEnd
+CreditAccountStart
+ID= 011
+Balance= -2057
+Rate= 0.0015
+LastDate= 2019-3-1
+Accumulation= 0
+Credits= 10000
+AnnualFee= 100
+LogInfoStart
+Log= 2019-3-1 -57 欠款利息结算
+Log= 2019-3-1 0 欠款利息结算
+Log= 2019-2-10 -4000 取款
+Log= 2019-2-1 0 欠款利息结算
+Log= 2019-1-1 2000 存款
+LogInfoEnd
+CreditAccountEnd
+AccountEnd
+UserEnd
+UserStart
+UserInfoStart
+Username= liuyang2
+Password= liuyang
+UserInfoEnd
+AccountStart
+SavingsAccountStart
+ID= 001
+Balance= 0
+Rate= 0.015
+LastDate= 2019-1-1
+Accumulation= 0
+LogInfoStart
+Log= 2019-1-1 0 储蓄利息结算
+LogInfoEnd
+SavingsAccountEnd
+CreditAccountStart
+ID= 002
+Balance= 0
+Rate= 0.0015
+LastDate= 2019-9-1
+Accumulation= 0
+Credits= 10000
+AnnualFee= 100
+LogInfoStart
+Log= 2019-9-1 0 欠款利息结算
+Log= 2019-8-1 0 欠款利息结算
+Log= 2019-7-1 0 欠款利息结算
+Log= 2019-6-1 0 欠款利息结算
+Log= 2019-5-1 0 欠款利息结算
+LogInfoEnd
+CreditAccountEnd
+SavingsAccountStart
+ID= 003
+Balance= 0
+Rate= 0.003
+LastDate= 2019-1-1
+Accumulation= 0
+LogInfoStart
+Log= 2019-1-1 0 储蓄利息结算
+LogInfoEnd
+SavingsAccountEnd
+AccountEnd
+UserEnd
+UserStart
+UserInfoStart
+Username= liuyang3
+Password= liuyang
+UserInfoEnd
+AccountStart
+CreditAccountStart
+ID= 100
+Balance= 8000
+Rate= 0.0001
+LastDate= 2019-2-1
+Accumulation= 0
+Credits= 10000
+AnnualFee= 1000
+LogInfoStart
+Log= 2019-2-1 -1000 取款
+Log= 2019-2-1 0 欠款利息结算
+Log= 2019-2-1 0 欠款利息结算
+Log= 2019-1-1 10000 存款
+Log= 2019-1-1 0 欠款利息结算
+LogInfoEnd
+CreditAccountEnd
+CreditAccountStart
+ID= 101
+Balance= 0
+Rate= 0.001
+LastDate= 2019-10-5
+Accumulation= 0
+Credits= 1000
+AnnualFee= 100
+LogInfoStart
+LogInfoEnd
+CreditAccountEnd
+SavingsAccountStart
+ID= 102
+Balance= 0
+Rate= 0.01
+LastDate= 2019-10-5
+Accumulation= 0
+LogInfoStart
+LogInfoEnd
+SavingsAccountEnd
+CreditAccountStart
+ID= 103
+Balance= 0
+Rate= 0.05
+LastDate= 2019-10-5
+Accumulation= 0
+Credits= 5000
+AnnualFee= 300
+LogInfoStart
+LogInfoEnd
+CreditAccountEnd
+SavingsAccountStart
+ID= 104
+Balance= 0
+Rate= 0.02
+LastDate= 2019-10-5
+Accumulation= 0
+LogInfoStart
+LogInfoEnd
+SavingsAccountEnd
+AccountEnd
+UserEnd
+UserStart
+UserInfoStart
+Username= liuyang4
+Password= liuyang
+UserInfoEnd
+AccountStart
+CreditAccountStart
+ID= 201
+Balance= -3420
+Rate= 0.005
+LastDate= 2019-3-1
+Accumulation= 0
+Credits= 10000
+AnnualFee= 1000
+LogInfoStart
+Log= 2019-3-1 -420 欠款利息结算
+Log= 2019-2-1 0 欠款利息结算
+Log= 2019-2-1 -8000 取款
+Log= 2019-2-1 0 欠款利息结算
+Log= 2019-1-1 0 欠款利息结算
+Log= 2019-1-1 5000 存款
+Log= 2019-1-1 0 欠款利息结算
+LogInfoEnd
+CreditAccountEnd
+AccountEnd
+UserEnd
+UserStart
+UserInfoStart
+Username= liuyang5
+Password= liuyang
+UserInfoEnd
+AccountStart
+AccountEnd
+UserEnd
+EndFile
