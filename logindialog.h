@@ -17,6 +17,10 @@ public:
 
 private slots:
     void on_LoginBtn_clicked();
+    void on_LoginDialog_objectNameChanged(const QString &objectName);
+
+    void on_CancleBtn_clicked();
+    
 private:
     Ui::LoginDialog *ui;
     System *os;

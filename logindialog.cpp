@@ -8,6 +8,7 @@ LoginDialog::LoginDialog(System *oss,QWidget *parent) :
     os(oss)
 {
     ui->setupUi(this);
+
 }
 
 LoginDialog::~LoginDialog()
@@ -26,4 +27,18 @@ void LoginDialog::on_LoginBtn_clicked()
     {
         QMessageBox::warning(this,tr("Warning"),tr(e.what()),QMessageBox::Yes);
     }
+}
+
+
+
+
+
+void LoginDialog::on_CancleBtn_clicked()
+{
+    //do nothing
+}
+
+void LoginDialog::on_LoginDialog_objectNameChanged(const QString &objectName)
+{
+
 }

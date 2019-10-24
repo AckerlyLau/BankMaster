@@ -16,15 +16,20 @@ class System
        string DataBaseFile;//存放数据的文件路径
        User * CurrentUser;//当前已登录账户
        Date Today;//今天的日期
+       int argc;
+       char **argv;
     public:
         System();
 		~System();
+        System(int argc,char **argv);
 		//查找用户 按照username查找用户
         bool FindUser(string username,User *&usr);
         //登录
         void Login(string username,string password);
-        //登陆的UI界面
+        //登陆的CMD界面
 		void CMDLogin();
+        //可视化登陆界面
+        void UILogin();
 		//登出
         void Logout();
         //添加账户
@@ -56,7 +61,7 @@ class System
         //输出欢迎界面，循环调用MainLoop
         void Start();
         //UI界面和Mainloop
-        void UIStart(int argc,char *argv[]);
+        void UIStart();
 		//分级展示菜单
         void ShowMenu(bool showDetail);
 		//MainLoop，处理用户交互，循环执行
