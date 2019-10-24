@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     Account.cpp \
     AccountException.cpp \
+    CreateAccountDialog.cpp \
     CreditAccount.cpp \
     Date.cpp \
     LogInfo.cpp \
@@ -32,6 +33,7 @@ SOURCES += \
 HEADERS += \
     Account.h \
     AccountException.h \
+    CreateAccountDialog.h \
     CreditAccount.h \
     Date.h \
     LogInfo.h \
@@ -43,6 +45,7 @@ HEADERS += \
     mainwindow.h
 
 FORMS += \
+    CreateAccountDialog.ui \
     logindialog.ui \
     mainwindow.ui
 

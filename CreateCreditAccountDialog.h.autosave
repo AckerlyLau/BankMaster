@@ -1,0 +1,26 @@
+#ifndef CREATEACCOUNTDIALOG_H
+#define CREATEACCOUNTDIALOG_H
+
+#include <QDialog>
+#include "System.h"
+namespace Ui {
+class CreateCreditAccountDialog;
+}
+
+class CreateCreditAccountDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit CreateCreditAccountDialog(System *oss,QWidget *parent = nullptr);
+    ~CreateCreditAccountDialog();
+
+private slots:
+    void on_pushButton_clicked();
+    
+private:
+    Ui::CreateCreditAccountDialog *ui;
+    System *os;
+};
+
+#endif // CREATEACCOUNTDIALOG_H

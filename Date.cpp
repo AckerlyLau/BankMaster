@@ -258,7 +258,21 @@ int Date::operator-(Date &dat)
     
     return days;
 }
-
+void Date::setDate(string str)
+{
+    int sum = 0;
+    for(sum = 0;str.find("-")!= str.npos;sum++)
+        str.replace(str.find("-"),1," ");
+    stringstream ss;
+    ss << str;
+    int year ,month,day;
+    ss >> year >> month >> day;
+    string sss;
+    ss >> sss;
+    if(sss.size() != 0 || year == 0 || month == 0 || day == 0 || sum != 2)
+        throw runtime_error("日期输入有误");
+    setDate(year,month,day);
+}
 //重载>>运算符
 istream &operator>>(istream &in,Date &date)
 {

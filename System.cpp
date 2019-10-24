@@ -21,16 +21,34 @@ System::System()
 {
 	cout << "System initing......" << endl;
 	DataBaseFile = "DataBase.txt";
-	CurrentUser = NULL;
+    CurrentUser = nullptr;
 	Today = Date(2019,1,1);
 	ReadFile();
 }
 System::~System()
 {
-	CurrentUser = NULL;
+    CurrentUser = nullptr;
 	SaveData();
 }
+System::System(int argc,char **argv)
+{
+    cout << "System initing......" << endl;
+    DataBaseFile = "DataBase.txt";
+    CurrentUser = nullptr;
+    Today = Date(2019,1,1);
+    ReadFile();
+    this -> argc = argc;
+    this -> argv = argv;
+}
 
+Date System::getToday()
+{
+    return Today;
+}
+void System::setToday(string day)
+{
+    Today.setDate(day);
+}
 bool System::FindUser(string username, User *&usr)
 {
 	for (map<string, User *>::iterator it = userData.begin(); it != userData.end(); it++)
@@ -79,12 +97,25 @@ void System::Login(string username, string password)
 			CurrentUser = usr;
 		}
 		else
-			throw runtime_error("用户名或密码错误");
+            throw runtime_error("密码错误");
 	}
 	else
 		throw runtime_error("用户名不存在");
 }
+//可视化登录界面
+bool System::UILogin()
+{
 
+    LoginDialog LoginDlg(this);
+    if(LoginDlg.exec()==LoginDialog::Accepted)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 void System::CMDLogin()
 {
 	string username, password;
@@ -96,7 +127,7 @@ void System::CMDLogin()
 	try
 	{
 		Login(username, password);
-		if(CurrentUser != NULL)
+        if(CurrentUser != nullptr)
 		{
 			cout << "**  " << CurrentUser->getUsername() << " 已登录." << endl;
 			cout <<"******************************"<<endl;
@@ -166,7 +197,7 @@ bool System::AddUser(string username, User *user)
 void System::CreateAccount(Date date, string id, double rate, double credit, double annualFee)
 {
 	Account *acc;
-	if(CurrentUser == NULL)
+    if(CurrentUser == nullptr)
 		throw runtime_error("用户未登录，无法创建帐户");
 	if (!FindAccount(id, acc))
 		CurrentUser->CreatAccount(date, id, rate, credit, annualFee);
@@ -215,10 +246,10 @@ bool System::FindAccount(string id, Account *&acc)
 
 void System::Logout()
 {
-	if (CurrentUser != NULL)
+    if (CurrentUser != nullptr)
 	{
 		CurrentUser->AccountLogout();
-		CurrentUser = NULL;
+        CurrentUser = nullptr;
 	}
 	cout << "** 用户登出成功" << endl;
 }
@@ -502,7 +533,7 @@ void System::CMDUseAccount()
 {
 	string id;
 	cin >> id;
-	if (CurrentUser != NULL)
+    if (CurrentUser != nullptr)
 	{
 		CurrentUser->UseAccount(id);
 		cout <<"** 欢迎您 " <<id<<" ,请告诉我今天的日期:";
@@ -657,22 +688,24 @@ void System::Start()
 }
 
 //UI界面和Mainloop
-void System::UIStart(int argc,char* argv[])
+bool System::UIStart()
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-
-    LoginDialog LoginDlg(this);
-    if(LoginDlg.exec() == QDialog::Accepted)
-    {
-        w.show();
-        a.exec();
+    QApplication App(argc, argv);
+    MainWindow Window(this);
+    if(CurrentUser == nullptr)
+    {   if(!UILogin())
+        {
+            return 0;
+        }
     }
+    Window.show();
+    App.exec();
+    return 0;
 }
 
 void System::ShowMenu(bool showDetail)
 {
-	if (CurrentUser == NULL)
+    if (CurrentUser == nullptr)
 	{
 		if (showDetail)
 		{
@@ -755,7 +788,7 @@ bool System::MainLoop()
 		}
 		else
 		{
-			if (CurrentUser == NULL)
+            if (CurrentUser == nullptr)
 			{
 				if (cho == "register")
 				{
@@ -861,3 +894,10 @@ bool System::MainLoop()
 	}
 	return true;
 }
+
+
+
+
+
+
+
