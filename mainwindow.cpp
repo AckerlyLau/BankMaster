@@ -3,6 +3,8 @@
 #include "System.h"
 #include "CreateAccountDialog.h"
 #include "RegisterDialog.h"
+#include "QListWidget"
+
 MainWindow::MainWindow(System *oss ,QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -28,3 +30,5 @@ void MainWindow::on_actionRegister_R_triggered()
     RegisterDialog rsg(os);
     rsg.exec();
 }
+
+
