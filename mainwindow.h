@@ -18,6 +18,8 @@ public:
 private slots:
     void on_actionNewAccount_triggered();
 
+    void on_actionRegister_R_triggered();
+
 private:
     Ui::MainWindow *ui;
     System *os;

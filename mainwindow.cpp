@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "System.h"
 #include "CreateAccountDialog.h"
+#include "RegisterDialog.h"
 MainWindow::MainWindow(System *oss ,QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -20,4 +21,10 @@ void MainWindow::on_actionNewAccount_triggered()
 {
     CreateAccountDialog newAcc(os);
     newAcc.exec();
+}
+
+void MainWindow::on_actionRegister_R_triggered()
+{
+    RegisterDialog rsg(os);
+    rsg.exec();
 }

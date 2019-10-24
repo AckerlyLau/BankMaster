@@ -20,6 +20,8 @@ private slots:
 
     void on_finishBtn_clicked();
 
+    void on_AccountTypeComoBox_currentTextChanged(const QString &arg1);
+
 private:
     Ui::CreateAccountDialog *ui;
     System *os;

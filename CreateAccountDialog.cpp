@@ -9,6 +9,8 @@ CreateAccountDialog::CreateAccountDialog(System *oss,QWidget *parent) :
     ui->setupUi(this);
     ui -> AccountTypeComoBox->addItem("储蓄账户");
     ui ->AccountTypeComoBox->addItem("信用账户");
+    ui -> CreditLineEdit->setEnabled(false);
+    ui -> AnnualFeeLineEdit->setEnabled(false);
 }
 
 CreateAccountDialog::~CreateAccountDialog()
@@ -30,7 +32,7 @@ void CreateAccountDialog::on_finishBtn_clicked()
                                ui -> CreditLineEdit->text().toDouble(),
                                ui->AnnualFeeLineEdit->text().toDouble()
                                );
-           cout <<"信用账户"<<endl;
+           cout <<"Credit"<<endl;
        }
        else
        {
@@ -40,12 +42,26 @@ void CreateAccountDialog::on_finishBtn_clicked()
                                -1,
                                -1
                                );
-           cout <<"储蓄账户"<<endl;
+           cout <<"Savings"<<endl;
        }
        accept();
     }
     catch(const std::exception &e)
     {
         QMessageBox::warning(this,tr("Warning"),tr(e.what()),QMessageBox::Yes);
+    }
+}
+
+void CreateAccountDialog::on_AccountTypeComoBox_currentTextChanged(const QString &arg1)
+{
+    if(ui->AccountTypeComoBox->currentText() == "信用账户")
+    {
+        ui -> CreditLineEdit->setEnabled(false);
+        ui -> AnnualFeeLineEdit->setEnabled(false);
+    }
+    else
+    {
+        ui -> CreditLineEdit->setEnabled(true);
+        ui -> AnnualFeeLineEdit->setEnabled(true);
     }
 }

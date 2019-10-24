@@ -40,6 +40,7 @@
     </property>
     <addaction name="separator"/>
     <addaction name="actionLogout"/>
+    <addaction name="actionRegister_R"/>
    </widget>
    <widget class="QMenu" name="menu_Z">
     <property name="title">
@@ -60,6 +61,11 @@
   <action name="actionNewAccount">
    <property name="text">
     <string>创建帐户(&amp;C)</string>
+   </property>
+  </action>
+  <action name="actionRegister_R">
+   <property name="text">
+    <string>注册用户(&amp;R)</string>
    </property>
   </action>
  </widget>

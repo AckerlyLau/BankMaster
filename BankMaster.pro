@@ -22,6 +22,7 @@ SOURCES += \
     CreditAccount.cpp \
     Date.cpp \
     LogInfo.cpp \
+    RegisterDialog.cpp \
     SavingsAccount.cpp \
     System.cpp \
     User.cpp \
@@ -37,6 +38,7 @@ HEADERS += \
     CreditAccount.h \
     Date.h \
     LogInfo.h \
+    RegisterDialog.h \
     SavingsAccount.h \
     System.h \
     User.h \
@@ -46,6 +48,7 @@ HEADERS += \
 
 FORMS += \
     CreateAccountDialog.ui \
+    RegisterDialog.ui \
     logindialog.ui \
     mainwindow.ui
 

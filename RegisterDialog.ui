@@ -1,69 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>LoginDialog</class>
- <widget class="QDialog" name="LoginDialog">
+ <class>RegisterDialog</class>
+ <widget class="QDialog" name="RegisterDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>251</width>
-    <height>147</height>
+    <width>234</width>
+    <height>152</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>登陆</string>
+   <string>Dialog</string>
   </property>
   <widget class="QWidget" name="formLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>30</y>
-     <width>171</width>
-     <height>51</height>
+     <x>20</x>
+     <y>20</y>
+     <width>191</width>
+     <height>74</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
     <item row="0" column="0">
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>用户名：</string>
+       <string>用户名:</string>
       </property>
      </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="usrLineEdit"/>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="pwdLineEdit"/>
     </item>
     <item row="1" column="0">
      <widget class="QLabel" name="label_2">
       <property name="text">
-       <string>密码：</string>
+       <string>密码:</string>
       </property>
      </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>确认密码:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="UsernameLineEdit"/>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="PasswordLineEdit"/>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="PasswordLineEdit_2"/>
     </item>
    </layout>
   </widget>
   <widget class="QWidget" name="horizontalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>90</y>
-     <width>171</width>
+     <x>19</x>
+     <y>100</y>
+     <width>191</width>
      <height>31</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QPushButton" name="LoginBtn">
+     <widget class="QPushButton" name="registerBtn">
       <property name="text">
-       <string>登陆</string>
+       <string>注册</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="CancleBtn">
+     <widget class="QPushButton" name="cancleBtn">
       <property name="text">
        <string>取消</string>
       </property>
@@ -75,18 +85,18 @@
  <resources/>
  <connections>
   <connection>
-   <sender>CancleBtn</sender>
+   <sender>cancleBtn</sender>
    <signal>clicked()</signal>
-   <receiver>LoginDialog</receiver>
+   <receiver>RegisterDialog</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>187</x>
-     <y>131</y>
+     <x>163</x>
+     <y>115</y>
     </hint>
     <hint type="destinationlabel">
-     <x>130</x>
-     <y>84</y>
+     <x>116</x>
+     <y>75</y>
     </hint>
    </hints>
   </connection>
