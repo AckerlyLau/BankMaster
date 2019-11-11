@@ -11,44 +11,22 @@
 #include <conio.h>
 #include "User.h"
 #include <utility>
-#include "mainwindow.h"
-#include <QTextCodec>
-#include <QApplication>
-#include "logindialog.h"
 using namespace std;
 
 System::System()
 {
 	cout << "System initing......" << endl;
 	DataBaseFile = "DataBase.txt";
-    CurrentUser = nullptr;
+	CurrentUser = NULL;
 	Today = Date(2019,1,1);
 	ReadFile();
 }
 System::~System()
 {
-    CurrentUser = nullptr;
+	CurrentUser = NULL;
 	SaveData();
 }
-System::System(int argc,char **argv)
-{
-    cout << "System initing......" << endl;
-    DataBaseFile = "DataBase.txt";
-    CurrentUser = nullptr;
-    Today = Date(2019,1,1);
-    ReadFile();
-    this -> argc = argc;
-    this -> argv = argv;
-}
 
-Date System::getToday()
-{
-    return Today;
-}
-void System::setToday(string day)
-{
-    Today.setDate(day);
-}
 bool System::FindUser(string username, User *&usr)
 {
 	for (map<string, User *>::iterator it = userData.begin(); it != userData.end(); it++)
@@ -97,25 +75,12 @@ void System::Login(string username, string password)
 			CurrentUser = usr;
 		}
 		else
-            throw runtime_error("密码错误");
+			throw runtime_error("用户名或密码错误");
 	}
 	else
 		throw runtime_error("用户名不存在");
 }
-//可视化登录界面
-bool System::UILogin()
-{
 
-    LoginDialog LoginDlg(this);
-    if(LoginDlg.exec()==LoginDialog::Accepted)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
 void System::CMDLogin()
 {
 	string username, password;
@@ -127,7 +92,7 @@ void System::CMDLogin()
 	try
 	{
 		Login(username, password);
-        if(CurrentUser != nullptr)
+		if(CurrentUser != NULL)
 		{
 			cout << "**  " << CurrentUser->getUsername() << " 已登录." << endl;
 			cout <<"******************************"<<endl;
@@ -197,7 +162,7 @@ bool System::AddUser(string username, User *user)
 void System::CreateAccount(Date date, string id, double rate, double credit, double annualFee)
 {
 	Account *acc;
-    if(CurrentUser == nullptr)
+	if(CurrentUser == NULL)
 		throw runtime_error("用户未登录，无法创建帐户");
 	if (!FindAccount(id, acc))
 		CurrentUser->CreatAccount(date, id, rate, credit, annualFee);
@@ -246,10 +211,10 @@ bool System::FindAccount(string id, Account *&acc)
 
 void System::Logout()
 {
-    if (CurrentUser != nullptr)
+	if (CurrentUser != NULL)
 	{
 		CurrentUser->AccountLogout();
-        CurrentUser = nullptr;
+		CurrentUser = NULL;
 	}
 	cout << "** 用户登出成功" << endl;
 }
@@ -278,8 +243,10 @@ void System::SaveData()
 				fout << "ID= " << it->second->getId() << endl;
 				fout << "Balance= " << it->second->getBalance() << endl;
 				fout << "Rate= " << it->second->getRate() << endl;
-				fout << "LastDate= " << it->second->getLastDate().TransferToString() << endl;
-				fout << "Accumulation= " << it->second->getAccumulation() << endl;
+				fout << "LastRecordedDate= " << it->second->getLastRecordedDate().TransferToString() << endl;
+				fout << "AccumulationLastDate= " << it->second->accumulation.lastDate.TransferToString() << endl;
+				fout << "AccumulationValue= " << it->second->accumulation.value << endl;
+				fout << "AccumulationSum= " << it->second->accumulation.sum << endl;
 				fout << "LogInfoStart" << endl;
 				int year = Today.getYear();
 				int month = Today.getMonth();
@@ -308,8 +275,10 @@ void System::SaveData()
 				fout << "ID= " << it->second->getId() << endl;
 				fout << "Balance= " << it->second->getBalance() << endl;
 				fout << "Rate= " << it->second->getRate() << endl;
-				fout << "LastDate= " << it->second->getLastDate().TransferToString() << endl;
-				fout << "Accumulation= " << it->second->getAccumulation() << endl;
+				fout << "LastRecordedDate= " << it->second->getLastRecordedDate().TransferToString() << endl;
+				fout << "AccumulationLastDate= " << it->second->accumulation.lastDate.TransferToString() << endl;
+				fout << "AccumulationValue= " << it->second->accumulation.value << endl;
+				fout << "AccumulationSum= " << it->second->accumulation.sum << endl;
 				CreditAccount *tmp = dynamic_cast<CreditAccount *>(it->second);
 				fout << "Credits= " << tmp->getCredits() << endl;
 				fout << "AnnualFee= " << tmp->getAnnualFee() << endl;
@@ -405,11 +374,13 @@ bool System::ReadFile()
 						SumOfAccount++;
 
 						//读入学生基本信息
-						string id;
-						double balance;
-						double rate;
-						Date lastDate;
-						double accumulation;
+						string id = "";
+						double balance = 0;
+						double rate = 0;
+						Date LastRecordedDate(2019, 1, 1);
+						Date AccumulationLastDate(2019, 1, 1);
+						double AccumulationValue = 0;
+						double AccumulationSum = 0;
 						multimap<Date,LogInfo> log;
 						while (index != "SavingsAccountEnd")
 						{
@@ -429,13 +400,21 @@ bool System::ReadFile()
 							{
 								fin >> rate;
 							}
-							else if (index == "LastDate=")
+							else if (index == "LastRecordedDate=")
 							{
-								fin >> lastDate;
+								fin >> LastRecordedDate;
 							}
-							else if (index == "Accumulation=")
+							else if (index == "AccumulationLastDate=")
 							{
-								fin >> accumulation;
+								fin >> AccumulationLastDate;
+							}
+							else if (index == "AccumulationValue=")
+							{
+								fin >> AccumulationValue;
+							}
+							else if (index == "AccumulationSum=")
+							{
+								fin >> AccumulationSum;
 							}
 							else if(index == "LogInfoStart")
 							{
@@ -451,7 +430,8 @@ bool System::ReadFile()
 								}
 							}
 						}
-						tmp = new SavingsAccount(lastDate, id, rate, usr->getUsername(), balance, accumulation,log);
+
+						tmp = new SavingsAccount(LastRecordedDate, id, rate, usr->getUsername(), balance, AccumulationLastDate,AccumulationValue,AccumulationSum,log);
 						usr->AddAccount(id, tmp);
 					}
 					while (index == "CreditAccountStart")
@@ -459,13 +439,15 @@ bool System::ReadFile()
 						SumOfAccount++;
 
 						//读入学生基本信息
-						string id;
-						double balance;
-						double rate;
-						Date lastDate;
-						double accumulation;
-						double credits;
-						double annualFee;
+						string id = "";
+						double balance = 0;
+						double rate = 0;
+						Date LastRecordedDate(2019, 1, 1);
+						Date AccumulationLastDate(2019, 1, 1);
+						double AccumulationValue = 0;
+						double AccumulationSum = 0;
+						double credits = 0;
+						double annualFee = 0;
 						multimap<Date,LogInfo> log;
 
 						while (index != "CreditAccountEnd")
@@ -486,13 +468,21 @@ bool System::ReadFile()
 							{
 								fin >> rate;
 							}
-							else if (index == "LastDate=")
+							else if (index == "LastRecordedDate=")
 							{
-								fin >> lastDate;
+								fin >> LastRecordedDate;
 							}
-							else if (index == "Accumulation=")
+							else if (index == "AccumulationLastDate=")
 							{
-								fin >> accumulation;
+								fin >> AccumulationLastDate;
+							}
+							else if (index == "AccumulationValue=")
+							{
+								fin >> AccumulationValue;
+							}
+							else if (index == "AccumulationSum=")
+							{
+								fin >> AccumulationSum;
 							}
 							else if (index == "Credits=")
 							{
@@ -516,7 +506,8 @@ bool System::ReadFile()
 								}
 							}
 						}
-						tmp = new CreditAccount(lastDate, id, rate, credits, annualFee, usr->getUsername(), balance, accumulation,log);
+
+						tmp = new CreditAccount(LastRecordedDate, id, rate, credits, annualFee, usr->getUsername(), balance, AccumulationLastDate, AccumulationValue, AccumulationSum,log);
 						usr->AddAccount(id, tmp);
 					}
 				}
@@ -533,12 +524,12 @@ void System::CMDUseAccount()
 {
 	string id;
 	cin >> id;
-    if (CurrentUser != nullptr)
+	if (CurrentUser != NULL)
 	{
 		CurrentUser->UseAccount(id);
 		cout <<"** 欢迎您 " <<id<<" ,请告诉我今天的日期:";
 		cin >> Today;
-		CurrentUser->CurrentAccount->DateUpdate(Today);
+		CurrentUser->CurrentAccount->Process(Today);
 
 	}
 	else
@@ -687,25 +678,9 @@ void System::Start()
 	while (MainLoop());
 }
 
-//UI界面和Mainloop
-bool System::UIStart()
-{
-    QApplication App(argc, argv);
-    MainWindow Window(this);
-    if(CurrentUser == nullptr)
-    {   if(!UILogin())
-        {
-            return 0;
-        }
-    }
-    Window.show();
-    App.exec();
-    return 0;
-}
-
 void System::ShowMenu(bool showDetail)
 {
-    if (CurrentUser == nullptr)
+	if (CurrentUser == NULL)
 	{
 		if (showDetail)
 		{
@@ -788,7 +763,7 @@ bool System::MainLoop()
 		}
 		else
 		{
-            if (CurrentUser == nullptr)
+			if (CurrentUser == NULL)
 			{
 				if (cho == "register")
 				{
@@ -894,10 +869,3 @@ bool System::MainLoop()
 	}
 	return true;
 }
-
-
-
-
-
-
-

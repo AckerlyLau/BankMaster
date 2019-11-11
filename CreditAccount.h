@@ -10,14 +10,12 @@ class CreditAccount : public Account
         double annualFee;
     public:
         //构造函数
-        CreditAccount(Date date,string id,double rate,double credits,double annualFee,string OwnerUsername,double balance,double accumulation,multimap<Date,LogInfo> log);
+        CreditAccount(Date date,string id,double rate,double credits,double annualFee,string OwnerUsername,double balance, Date accumulationDate, double accumulationValue, double accumulationSum,multimap<Date,LogInfo> log);
         CreditAccount(Date date,string id,double rate,double credits,double annualFee,string OwnerUsername);
         CreditAccount(); 
     	 
         //取款，重载
         void withdraw(Date,double);
-        //累计利息
-		void accumulate(Date date);
 
         //信用额度
         double getCredits();

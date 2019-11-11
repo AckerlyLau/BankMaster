@@ -146,7 +146,7 @@ void User::ShowWarningInfo()
     for(map<string,Account*>::iterator it  =  userAccount.begin();it != userAccount.end();it++)
     {
         double amount = 0;
-        for(multimap<Date,LogInfo>::iterator ite = it -> second ->Log.lower_bound(Date(it -> second ->getLastDate().getYear(),it -> second ->getLastDate().getMonth(),1));ite != it -> second -> Log.end();ite++)
+        for(multimap<Date,LogInfo>::iterator ite = it -> second ->Log.lower_bound(Date(it -> second ->getLastRecordedDate().getYear(),it -> second ->getLastRecordedDate().getMonth(),1));ite != it -> second -> Log.end();ite++)
         {
             amount += ite -> second.getAmount();
         }

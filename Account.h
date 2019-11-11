@@ -5,6 +5,7 @@
 #include <map>
 #include "LogInfo.h"
 #include <utility>
+#include "Accumulator.h"
 /***********************************
 Account.h
 Account类的声明 
@@ -19,8 +20,8 @@ class Account
 		string id;
 		double balance;
 		double rate;
-		Date lastDate;
-		double accumulation;
+		Accumulator accumulation;
+		Date lastRecordedDate;
 		int accountType;
 		multimap<Date,LogInfo> Log;
 		string OwnerUsername;
@@ -28,7 +29,7 @@ class Account
 		friend class System;
 		friend class User;
 		//构造函数
-		Account(Date date,string id,double rate,int accountType,string OwnerUsername,double balance ,double accumulation,multimap<Date,LogInfo> log); 
+		Account(Date date,string id,double rate,int accountType,string OwnerUsername,double balance , Date accumulationDate, double accumulationValue, double accumulationSum,multimap<Date,LogInfo> log);
 		Account(Date date,string id,double rate,int accountType,string OwnerUsername);
 		Account();
 		Account(int accountType);
@@ -39,20 +40,17 @@ class Account
 		//帐户类型
 		int getAccountType();
 		
-		//利息累计 
-		virtual void accumulate(Date date)  = 0 ;
+		//日期更新 ，即上次操作账户时的信息
+		void DateUpdating(Date date);
 
 		//上次操作日期
-		Date getLastDate();
+		Date getLastRecordedDate();
 		
-		//获取利息累计信息
-		double getAccumulation();
-
 		//获取账户id 
 		string getId();
 		
-		//更新日期，并且决定结算
-		void DateUpdate(Date date);
+		//处理历史结算信息
+		void Process(Date date);
 
 		//获取余额 
 		double getBalance();

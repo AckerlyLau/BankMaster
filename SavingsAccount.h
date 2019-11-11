@@ -13,12 +13,10 @@ class SavingsAccount : public Account
 {
 	public:
 		//构造函数 
-		SavingsAccount(Date date,string id,double rate,string OwnerUsername,double balance,double accumulation,multimap<Date,LogInfo> log);
+		SavingsAccount(Date date,string id,double rate,string OwnerUsername,double balance,Date accumulationDate,double accumulationValue,double accumulationSum,multimap<Date,LogInfo> log);
 		SavingsAccount(Date date,string id,double rate,string OnwerUsername);
 		SavingsAccount();
 		
-		//累计利息
-		void accumulate(Date date); 
 
 		//取款，重载
 		void withdraw(Date date,double amount);

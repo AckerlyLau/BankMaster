@@ -1,10 +1,7 @@
-﻿#include "mainwindow.h"
-#include <QTextCodec>
-#include <QApplication>
-#include "logindialog.h"
-#include "System.h"
-int main(int argc, char *argv[])
+﻿#include "System.h"
+int main() 
 {
-    System *os = new System(argc,argv);
-    os -> UIStart();
+	System *os = new System();
+	os -> Start();
+	delete os;
 }

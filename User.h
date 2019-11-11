@@ -47,6 +47,7 @@ class User
         void Deposit(Date date,double amount);
         //存款
         void Withdraw(Date date,double amount);
+		//所有账户的的全部存款信息
 		double getTotal();
 };
 #endif

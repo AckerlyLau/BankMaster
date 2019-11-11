@@ -14,13 +14,13 @@
    <string>银行账户管理系统 刘洋 计科184</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTableWidget" name="tableWidget">
+   <widget class="QLineEdit" name="lineEdit">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>271</width>
-      <height>341</height>
+      <x>200</x>
+      <y>160</y>
+      <width>113</width>
+      <height>20</height>
      </rect>
     </property>
    </widget>

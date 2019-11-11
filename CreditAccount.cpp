@@ -9,7 +9,7 @@
 using namespace std; 
 
 //构造函数
-CreditAccount::CreditAccount(Date date,string id,double rate,double credits,double annualFee,string OwnerUsername ,double balance,double accumulation,multimap<Date,LogInfo> log):Account(date,id,rate,TypeCredit,OwnerUsername,balance,accumulation,log)
+CreditAccount::CreditAccount(Date date,string id,double rate,double credits,double annualFee,string OwnerUsername ,double balance, Date accumulationDate, double accumulationValue, double accumulationSum,multimap<Date,LogInfo> log):Account(date,id,rate,TypeCredit,OwnerUsername,balance, accumulationDate, accumulationValue, accumulationSum,log)
 {
     this -> credits = credits;
     this -> annualFee = annualFee;
@@ -38,34 +38,22 @@ double CreditAccount::getAnnualFee()
 
 
 
-//累计利息 
-void CreditAccount::accumulate(Date date)
-{
-
-    if(balance < 0)
-		accumulation += getBalance() * (date - lastDate); 
-
-	//刷新上次结算信息	
-	lastDate = date;
-	//lastDate = date;
-}
-
-
 //结算利息 
 void CreditAccount::settle(Date date)
 {
 	//cout << "Debug::settle被调用" << endl;
-	if(date.getMonth() == 1 && date.getDay() == 1 && lastDate.getYear() != date.getYear())
+	if(date.getMonth() == 1 && date.getDay() == 1 && getLastRecordedDate().getYear() != date.getYear())
     {
         //扣除年费,每年1月1日
+		DateUpdating(date);
 		record(date,-annualFee,"扣除年费");
     }
 	if(date.getDay() == 1)
 	{
-    	accumulate(date);
-		double amount = accumulation * getRate();
-		accumulation = 0;
+		double amount = accumulation.getSum(date) * getRate();
+		DateUpdating(date);
 		record(date,amount,"欠款利息结算");
+		accumulation.reset(date, getBalance());
 	}
 }
 
@@ -75,13 +63,14 @@ void CreditAccount::settle(Date date)
 {
 	if(amount < 0)
 		throw AccountException("取款金额不能为负",this);
-	if(date < lastDate)
+	if(date < getLastRecordedDate())
 		throw AccountException("日期时间错误，无法时光倒流.",this);
 	if(amount <= balance + credits)
 	{
 		//cout <<"heiheihei"<<endl;
 		//处理余额变动
 		record(date,-amount,"取款");
+		accumulation.change(date, getBalance());
 	}
 	else
 		throw AccountException("取款超出信用额度限制,取款失败。",this);
@@ -94,10 +83,12 @@ void CreditAccount::deposit(Date date,double amount)
 	//cout <<"Debug::CreditAccount::deposit"<<endl;
 	if(amount < 0)
 		throw AccountException("存款金额不能为负",this);
-	if(date < lastDate)
+	if(date < getLastRecordedDate())
 		throw AccountException("日期时间错误，无法时光倒流.",this);
 	//处理余额变动
 	record(date,amount,"存款");
+	accumulation.change(date, getBalance());
+
 }
 
 
@@ -112,7 +103,7 @@ void CreditAccount::show()
 	//cout <<"** 余额(利息):"<<settle(date) <<endl; 
 	//cout <<"** 总金额:" << getBalance() << endl;
 	cout <<"** 日利率:"<<getRate() <<endl;
-	cout <<"** 上次操作日期: "<<lastDate.TransferToString() <<endl;
+	cout <<"** 上次操作日期: "<<getLastRecordedDate().TransferToString() <<endl;
 	cout <<"***************** End *********************"<<endl;
 
 }

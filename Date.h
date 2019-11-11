@@ -23,9 +23,8 @@ class Date
         void setMonth(int month );//给month赋值
         void setDay(int day); //给day赋值
         void showDate(int style = YYYY_MM_DD);//显示日期，默认为YYYY-MM-DD格式输出
-        void setDate(string str);
         string TransferToString(int style = YYYY_MM_DD);//将日期转换为string字符串返回
-        int operator-(Date &dat);//两日期相减，返回两个日期相距天数
+        int operator-( Date &dat) ;//两日期相减，返回两个日期相距天数
 		Date& operator+(int a);
 };
 
