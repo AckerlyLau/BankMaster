@@ -11,18 +11,21 @@
 #include <utility>
 #include "Date.h"
 #include "LogInfo.h"
+#include <vector>
 using namespace std;
 
 User::User()
 {
-    CurrentAccount = NULL;
+    CurrentAccount = nullptr;
+    logmgr = nullptr;
 }
 
-User::User(string username,string password)
+User::User(string username,string password,LogMaster *logmgr)
 {
     this -> username = username;
     this -> password = password;
-    CurrentAccount = NULL;
+    CurrentAccount = nullptr;
+    this -> logmgr = logmgr;
 }
 string User::getUsername()
 {
@@ -57,11 +60,11 @@ void User::CreatAccount(Date date,string id,double rate,double credit,double ann
     Account *acc;
     if(credit < 0)
     {
-        acc = new SavingsAccount(date,id,rate,this->getUsername());
+        acc = new SavingsAccount(date,id,rate,this->getUsername(),logmgr);
     } 
     else
     {
-        acc = new CreditAccount(date,id,rate,credit,annualFee,this->getUsername());
+        acc = new CreditAccount(date,id,rate,credit,annualFee,this->getUsername(),logmgr);
     }
     //userData.insert(make_pair(id,user));
     AddAccount(id,acc);
@@ -79,7 +82,7 @@ bool User::FindAccount(string id,Account *& acc)
 }
 bool User::isAccountSelected()
 {
-    if(CurrentAccount == NULL)
+    if(CurrentAccount == nullptr)
         return false;
     else
         return true;
@@ -101,8 +104,8 @@ void User::UseAccount(string id)
 
 void User::AccountLogout()
 {
-	if(CurrentAccount != NULL)
-	    CurrentAccount = NULL;
+    if(CurrentAccount != nullptr)
+        CurrentAccount = nullptr;
     cout << "** 账户登出成功"<<endl;
 }
 
@@ -161,7 +164,7 @@ void User::ShowWarningInfo()
 //取款
 void User::Deposit(Date date,double amount)
 {
-    if(CurrentAccount != NULL)
+    if(CurrentAccount != nullptr)
     {
         //cout <<"Debug:" <<"User::Deposit" <<endl;
         CurrentAccount -> deposit(date,amount);
@@ -175,7 +178,7 @@ void User::Deposit(Date date,double amount)
 //存款
 void User::Withdraw(Date date,double amount)
 {
-    if(CurrentAccount != NULL)
+    if(CurrentAccount != nullptr)
     {
         CurrentAccount -> withdraw(date,amount);
         cout << "** 取款操作成功,当前余额 " << CurrentAccount -> getBalance() <<endl;
@@ -193,4 +196,18 @@ double User::getTotal()
 		total += it->second->getBalance();
 	}
 	return total;
+}
+Account * User::getCurrentAccount()
+{
+    return CurrentAccount;
+}
+
+vector<string>  User::getAllAccountID()
+{
+    vector<string> vec;
+    for(map<string,Account*>::iterator it = userAccount.begin();it != userAccount.end();it ++)
+    {
+        vec.push_back(it->second->getId());
+    }
+    return vec;
 }

@@ -16,11 +16,10 @@ public:
     ~CreateAccountDialog();
 
 private slots:
-    void on_pushButton_clicked();
-
     void on_finishBtn_clicked();
-
     void on_AccountTypeComoBox_currentTextChanged(const QString &arg1);
+signals:
+    void sendData(QString data);
 
 private:
     Ui::CreateAccountDialog *ui;

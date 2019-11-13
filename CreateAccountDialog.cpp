@@ -44,6 +44,7 @@ void CreateAccountDialog::on_finishBtn_clicked()
                                );
            cout <<"Savings"<<endl;
        }
+       emit sendData(ui->IDLineEdit->text());
        accept();
     }
     catch(const std::exception &e)

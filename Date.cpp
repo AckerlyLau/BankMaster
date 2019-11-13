@@ -15,6 +15,14 @@ Date::Date(int year, int month, int day)
 {
     setDate(year, month, day);
 }
+/*
+Date::Date(Date &date)
+{
+    this->day = date.day;
+    this->year = date.year;
+    this->month = date.month;
+}
+*/
 int Date::getYear() const
 {
     return year;
@@ -286,48 +294,64 @@ ostream &operator<<(ostream &out,Date &date)
     return out;
 }
 //重载加号
-Date& Date::operator+( int a)
+Date Date::operator+( int a)
 {
 	//                1  2  3  4  5  6  7  8  9 10 11 12
 	int mp[13] = { 0,31,28,31,30,31,30,31,31,30,31,30,31 };
 	int mr[13] = { 0,31,29,31,30,31,30,31,31,30,31,30,31 };
-	int*m;
-	Date d = *this;
+    int *m;
+    Date d = *this;
+    //Date *d =new Date(this->getYear(),this->getMonth(),this->getMonth());
+    //*d = *this;
 	int b = a;
 	while (b > 0)
 	{
-		if (d.year % 4 == 0 && d.year % 100 != 0 || d.year % 400 == 0)
+        if (d.year % 4 == 0 && d.year % 100 != 0 || d.year % 400 == 0)
 			m = mr;
 		else
 			m = mp;
-		if (d.day + b > m[d.month])
+        if (d.day + b > m[d.month])
 		{
-			b = b - m[d.month] + d.day -1;
-			d.day = 1;
-			if (d.month >= 12)
+            b = b - m[d.month] + d.day -1;
+            d.day = 1;
+            if (d.month >= 12)
 			{
-				d.year++;
-				d.month = 1;
+                d.year++;
+                d.month = 1;
 			}
 			else
 			{
-				d.month++;
+                d.month++;
 			}
 		}
 		else
 		{
-			d.day += b;
+            d.day += b;
 			b = 0;
 		}
 	}
-	return d;
+    return d;
 }
 
-
+/*
+void Date::operator=(const Date *&D )
+{
+    this->day = D->getDay();
+    this->year = D->getYear();
+    this->month = D->getMonth();
+    delete D;
+}
+void Date::operator=(const Date &D )
+{
+    this->day = D.getDay();
+    this->year = D.getYear();
+    this->month = D.getMonth();
+}
+*/
 /*
 ofstream &operator<<(ofstream &out,Date &date)
 {
-    //*os << date.getYear;
+    *os << date.getYear;
    //return ofs;
     //static_cast<ostream&>(out) << value;
      out << to_string(date.getYear()) <<"-" <<date.getMonth() <<"-" << date.getDay();

@@ -11,22 +11,65 @@
 #include <conio.h>
 #include "User.h"
 #include <utility>
+#include "mainwindow.h"
+#include <QTextCodec>
+#include <QApplication>
+#include "logindialog.h"
+#include "QMessageBox"
+
 using namespace std;
 
 System::System()
 {
 	cout << "System initing......" << endl;
 	DataBaseFile = "DataBase.txt";
-	CurrentUser = NULL;
+    CurrentUser = nullptr;
 	Today = Date(2019,1,1);
+    logmgr = new LogMaster(ui);
 	ReadFile();
 }
 System::~System()
 {
-	CurrentUser = NULL;
-	SaveData();
+    string info ;
+    try
+    {
+        CurrentUser = nullptr;
+        info = SaveData();
+    }
+    catch (const exception &e)
+    {
+
+        QMessageBox::warning(nullptr,"数据保存失败",e.what());
+    }
+    QMessageBox::information(nullptr,"数据保存",info.c_str());
+
+}
+System::System(Ui::MainWindow *ui)
+{
+    cout << "System initing......" << endl;
+    DataBaseFile = "DataBase.txt";
+    CurrentUser = nullptr;
+    Today = Date(2019,1,1);
+    this -> ui = ui;
+    logmgr = new LogMaster(ui);
+    string info;
+    info = ReadFile();
+    QMessageBox::information(nullptr,"读档",info.c_str());
 }
 
+void System::setToday(Date day)
+{
+    Today = day;
+}
+void System::setToday(int year,int month,int day)
+{
+    Date days(year,month,day);
+    Today = days;
+}
+Date System::getToday()
+{
+    return Today;
+}
 bool System::FindUser(string username, User *&usr)
 {
 	for (map<string, User *>::iterator it = userData.begin(); it != userData.end(); it++)
@@ -92,7 +135,7 @@ void System::CMDLogin()
 	try
 	{
 		Login(username, password);
-		if(CurrentUser != NULL)
+        if(CurrentUser != nullptr)
 		{
 			cout << "**  " << CurrentUser->getUsername() << " 已登录." << endl;
 			cout <<"******************************"<<endl;
@@ -109,7 +152,7 @@ void System::CMDLogin()
 //注册
 void System::Register(string username, string password)
 {
-	User *user = new User(username, password);
+    User *user = new User(username, password,logmgr);
 	if(!AddUser(username, user))
 		throw runtime_error("用户名已被使用，注册失败");
 }
@@ -162,7 +205,7 @@ bool System::AddUser(string username, User *user)
 void System::CreateAccount(Date date, string id, double rate, double credit, double annualFee)
 {
 	Account *acc;
-	if(CurrentUser == NULL)
+    if(CurrentUser == nullptr)
 		throw runtime_error("用户未登录，无法创建帐户");
 	if (!FindAccount(id, acc))
 		CurrentUser->CreatAccount(date, id, rate, credit, annualFee);
@@ -211,16 +254,16 @@ bool System::FindAccount(string id, Account *&acc)
 
 void System::Logout()
 {
-	if (CurrentUser != NULL)
+    if (CurrentUser != nullptr)
 	{
 		CurrentUser->AccountLogout();
-		CurrentUser = NULL;
+        CurrentUser = nullptr;
 	}
 	cout << "** 用户登出成功" << endl;
 }
 
 //保存数据
-void System::SaveData()
+string System::SaveData()
 {
 	ofstream fout;
 	fout.open(DataBaseFile, ios::out);
@@ -309,23 +352,24 @@ void System::SaveData()
 		fout << "UserEnd" << endl;
 	}
 	fout << "EndFile" << endl; //文件结束标识
-	cout << "** 数据保存完成" << endl;
+    //cout << "** 数据保存完成" << endl;
 	fout.close();
-	//return true;
+    string info = "数据保存完成";
+    return info;
 }
 
 //从文件中读取数据
-bool System::ReadFile()
+string System::ReadFile()
 {
-	cout << "正在从文件中读取数据..." << endl;
+    //cout << "正在从文件中读取数据..." << endl;
 	fstream fin;
 	fin.open(DataBaseFile);
 	if (!fin)
 	{
-		cout << "文件打开错误。如果这是第一次运行程序，请按回车跳过,若不是，请检查文件目录下的DataBase.txt是否正常" << endl;
+        //cout << "文件打开错误。如果这是第一次运行程序，请按回车跳过,若不是，请检查文件目录下的DataBase.txt是否正常" << endl;
 		cin.ignore();
 		fin.close();
-		return false;
+        return "文件打开错误。如果这是第一次运行程序，请忽略此消息,若不是，请检查文件目录下的DataBase.txt是否正常";
 	}
 	string index;
 	int SumOfAccount = 0;
@@ -357,7 +401,7 @@ bool System::ReadFile()
 					fin >> password;
 				}
 			}
-			usr = new User(username, password);
+            usr = new User(username, password,logmgr);
 			Account *tmp;
 			fin >> index;
 			//cout << "5: " << index << endl;
@@ -431,7 +475,7 @@ bool System::ReadFile()
 							}
 						}
 
-						tmp = new SavingsAccount(LastRecordedDate, id, rate, usr->getUsername(), balance, AccumulationLastDate,AccumulationValue,AccumulationSum,log);
+                        tmp = new SavingsAccount(LastRecordedDate, id, rate, usr->getUsername(), balance, AccumulationLastDate,AccumulationValue,AccumulationSum,log,logmgr);
 						usr->AddAccount(id, tmp);
 					}
 					while (index == "CreditAccountStart")
@@ -507,7 +551,7 @@ bool System::ReadFile()
 							}
 						}
 
-						tmp = new CreditAccount(LastRecordedDate, id, rate, credits, annualFee, usr->getUsername(), balance, AccumulationLastDate, AccumulationValue, AccumulationSum,log);
+                        tmp = new CreditAccount(LastRecordedDate, id, rate, credits, annualFee, usr->getUsername(), balance, AccumulationLastDate, AccumulationValue, AccumulationSum,log,logmgr);
 						usr->AddAccount(id, tmp);
 					}
 				}
@@ -515,16 +559,15 @@ bool System::ReadFile()
 			AddUser(username, usr);
 		}
 	}
-	cout << SumOfUser << " 个用户信息 " << SumOfAccount << " 个账户信息读取完成。" << endl;
 	fin.close();
-	return true;
+    return to_string(SumOfUser) + " 个用户信息 " + to_string(SumOfAccount) + " 个账户信息读取完成。";
 }
 
 void System::CMDUseAccount()
 {
 	string id;
 	cin >> id;
-	if (CurrentUser != NULL)
+    if (CurrentUser != nullptr)
 	{
 		CurrentUser->UseAccount(id);
 		cout <<"** 欢迎您 " <<id<<" ,请告诉我今天的日期:";
@@ -536,6 +579,18 @@ void System::CMDUseAccount()
 	{
 		throw runtime_error("未登录，无法选择账户");
 	}
+}
+void System::UseAccount(string id)
+{
+    if (CurrentUser != nullptr)
+    {
+        CurrentUser->UseAccount(id);
+        CurrentUser->CurrentAccount->Process(Today);
+    }
+    else
+    {
+        throw runtime_error("未登录，无法选择账户");
+    }
 }
 
 void System::HelpMe(string cmd)
@@ -678,9 +733,35 @@ void System::Start()
 	while (MainLoop());
 }
 
+//UI界面和Mainloop
+bool System::UIStart()
+{
+    if(CurrentUser == nullptr)
+    {   if(!UILogin())
+        {
+            return 0;
+        }
+    }
+    return 0;
+}
+
+//可视化登录界面
+bool System::UILogin()
+{
+
+    LoginDialog LoginDlg(this);
+    if(LoginDlg.exec()==LoginDialog::Accepted)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 void System::ShowMenu(bool showDetail)
 {
-	if (CurrentUser == NULL)
+    if (CurrentUser == nullptr)
 	{
 		if (showDetail)
 		{
@@ -763,7 +844,7 @@ bool System::MainLoop()
 		}
 		else
 		{
-			if (CurrentUser == NULL)
+            if (CurrentUser == nullptr)
 			{
 				if (cho == "register")
 				{
@@ -868,4 +949,38 @@ bool System::MainLoop()
 		return true;
 	}
 	return true;
+}
+
+User * System::getCurrentUser()
+{
+    return CurrentUser;
+}
+
+void System::Deposit(double amount)
+{
+    if(CurrentUser != nullptr)
+    {
+    //cout << "哈哈哈"<<endl;
+
+        //cout <<"Debug" << Today << endl;
+        //cout <<"Debug::取款"<<endl;
+        CurrentUser->Deposit(Today, amount);
+    }
+    else
+        throw("没有登录，不能进行操作");
+
+}
+void System::Withdraw(double amount)
+{
+
+    if(CurrentUser != nullptr)
+    {
+        //cout << "哈哈哈"<<endl;
+
+        //cout <<"Debug" << Today << endl;
+        //cout <<"Debug::取款"<<endl;
+        CurrentUser->Withdraw(Today, amount);
+    }
+    else
+        throw("没有登录，不能进行操作");
 }

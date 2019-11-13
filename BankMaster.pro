@@ -18,10 +18,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     Account.cpp \
     AccountException.cpp \
+    Accumulator.cpp \
     CreateAccountDialog.cpp \
     CreditAccount.cpp \
     Date.cpp \
     LogInfo.cpp \
+    LogMaster.cpp \
     RegisterDialog.cpp \
     SavingsAccount.cpp \
     System.cpp \
@@ -34,10 +36,12 @@ SOURCES += \
 HEADERS += \
     Account.h \
     AccountException.h \
+    Accumulator.h \
     CreateAccountDialog.h \
     CreditAccount.h \
     Date.h \
     LogInfo.h \
+    LogMaster.h \
     RegisterDialog.h \
     SavingsAccount.h \
     System.h \

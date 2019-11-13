@@ -13,8 +13,8 @@ class SavingsAccount : public Account
 {
 	public:
 		//构造函数 
-		SavingsAccount(Date date,string id,double rate,string OwnerUsername,double balance,Date accumulationDate,double accumulationValue,double accumulationSum,multimap<Date,LogInfo> log);
-		SavingsAccount(Date date,string id,double rate,string OnwerUsername);
+        SavingsAccount(Date date,string id,double rate,string OwnerUsername,double balance,Date accumulationDate,double accumulationValue,double accumulationSum,multimap<Date,LogInfo> log,LogMaster *logmgr);
+        SavingsAccount(Date date,string id,double rate,string OnwerUsername,LogMaster *logmgr);
 		SavingsAccount();
 		
 

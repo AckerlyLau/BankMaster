@@ -6,7 +6,8 @@
 #include "SavingsAccount.h"
 #include <string>
 #include <utility>
-
+#include <vector>
+#include "LogMaster.h"
 using namespace std;
 class User
 {
@@ -15,12 +16,14 @@ class User
         Account *CurrentAccount;//当前账户指针
         string username;//用户名
         string password;//密码
+        LogMaster *logmgr;
+
     public:
 		//友元
         friend class System;
         //构造函数
 		User();
-        User(string username,string password);
+        User(string username,string password,LogMaster *logmgr);
         //获取username
 		string getUsername();
         //获取password
@@ -47,7 +50,11 @@ class User
         void Deposit(Date date,double amount);
         //存款
         void Withdraw(Date date,double amount);
+        Account * getCurrentAccount();
 		//所有账户的的全部存款信息
 		double getTotal();
+        //所有账户的ID
+        vector<string> getAllAccountID();
+
 };
 #endif

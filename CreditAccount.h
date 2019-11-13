@@ -2,7 +2,7 @@
 #define _CREDITACCOUNT_H_
 #include "Account.h"
 #include "Date.h"
-
+#include "LogMaster.h"
 class CreditAccount : public Account
 {
     private:
@@ -10,8 +10,8 @@ class CreditAccount : public Account
         double annualFee;
     public:
         //构造函数
-        CreditAccount(Date date,string id,double rate,double credits,double annualFee,string OwnerUsername,double balance, Date accumulationDate, double accumulationValue, double accumulationSum,multimap<Date,LogInfo> log);
-        CreditAccount(Date date,string id,double rate,double credits,double annualFee,string OwnerUsername);
+        CreditAccount(Date date,string id,double rate,double credits,double annualFee,string OwnerUsername,double balance, Date accumulationDate, double accumulationValue, double accumulationSum,multimap<Date,LogInfo> log,LogMaster *logmgr);
+        CreditAccount(Date date,string id,double rate,double credits,double annualFee,string OwnerUsername,LogMaster *logmgr);
         CreditAccount(); 
     	 
         //取款，重载

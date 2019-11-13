@@ -12,14 +12,24 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(System *oss,QWidget *parent = nullptr);
+    MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    bool flagForAccountTypeComobox;
 
 private slots:
     void on_actionNewAccount_triggered();
 
     void on_actionRegister_R_triggered();
 
+    void on_TodayEdit_userDateChanged(const QDate &date);
+
+    void on_AccountTypeComobox_currentTextChanged(const QString &arg1);
+
+    void on_SubmitTransButton_clicked();
+    void RenewAccountInfo();
+    void receiveData(QString data);
+    void on_actionLogout_triggered();
+    void RenewUserInfo();
 private:
     Ui::MainWindow *ui;
     System *os;

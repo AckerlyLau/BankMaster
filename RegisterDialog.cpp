@@ -30,6 +30,7 @@ void RegisterDialog::on_registerBtn_clicked()
         {
             QMessageBox::warning(this,tr("Warning"),tr("两次密码输入不一致。"),QMessageBox::Yes);
         }
+        QMessageBox::information(this,tr("信息"),tr("注册成功"),QMessageBox::Yes);
         accepted();
     }
     catch(const std::exception &e)

@@ -9,12 +9,12 @@
 using namespace std; 
 
 //构造函数
-CreditAccount::CreditAccount(Date date,string id,double rate,double credits,double annualFee,string OwnerUsername ,double balance, Date accumulationDate, double accumulationValue, double accumulationSum,multimap<Date,LogInfo> log):Account(date,id,rate,TypeCredit,OwnerUsername,balance, accumulationDate, accumulationValue, accumulationSum,log)
+CreditAccount::CreditAccount(Date date,string id,double rate,double credits,double annualFee,string OwnerUsername ,double balance, Date accumulationDate, double accumulationValue, double accumulationSum,multimap<Date,LogInfo> log,LogMaster *logmgr):Account(date,id,rate,TypeCredit,OwnerUsername,balance, accumulationDate, accumulationValue, accumulationSum,log,logmgr)
 {
     this -> credits = credits;
     this -> annualFee = annualFee;
 }
-CreditAccount::CreditAccount(Date date,string id,double rate,double credits,double annualFee,string OwnerUsername ):Account(date,id,rate,TypeCredit,OwnerUsername)
+CreditAccount::CreditAccount(Date date,string id,double rate,double credits,double annualFee,string OwnerUsername,LogMaster *logmgr):Account(date,id,rate,TypeCredit,OwnerUsername,logmgr)
 {
     this -> credits = credits;
     this -> annualFee = annualFee;

@@ -5,10 +5,13 @@
 #include "Account.h"
 #include "SavingsAccount.h"
 #include "CreditAccount.h"
-
 #include <iostream>
 #include <string>
 #include "User.h"
+#include <QMainWindow>
+#include "LogMaster.h"
+namespace Ui { class MainWindow; }
+
 using namespace std;
 class System
 { 
@@ -17,15 +20,24 @@ class System
        string DataBaseFile;//存放数据的文件路径
        User * CurrentUser;//当前已登录账户
        Date Today;//今天的日期
+       Ui::MainWindow *ui;
+       LogMaster *logmgr;
     public:
         System();
 		~System();
+        System(Ui::MainWindow *ui);
 		//查找用户 按照username查找用户
         bool FindUser(string username,User *&usr);
+        void setToday(Date day);
+        Date getToday();
+        void setToday(string day);
+        void setToday(int year,int month,int day);
         //登录
         void Login(string username,string password);
         //登陆的UI界面
 		void CMDLogin();
+        //可视化登陆界面
+        bool UILogin();
 		//登出
         void Logout();
         //添加账户
@@ -51,16 +63,24 @@ class System
 		//选择账户界面的UI
         void CMDUseAccount();
         //保存数据，在析构函数中调用
-        void SaveData();
+        string SaveData();
         //初始化读取数据，在构造函数中调用
-		bool ReadFile();
+        string ReadFile();
         //输出欢迎界面，循环调用MainLoop
         void Start();
+        //UI界面和Mainloop
+        bool UIStart();
 		//分级展示菜单
         void ShowMenu(bool showDetail);
 		//MainLoop，处理用户交互，循环执行
 		bool MainLoop();
 		//帮助菜单
         void HelpMe(string cmd);
+        //获取当前用户信息
+        User * getCurrentUser();
+        void Deposit(double amount);
+        void Withdraw(double amount);
+        void AddLog(string log);
+
 };
 #endif

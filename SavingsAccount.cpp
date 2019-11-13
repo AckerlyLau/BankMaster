@@ -9,12 +9,12 @@ using namespace std;
  
 
 //构造函数
-SavingsAccount::SavingsAccount(Date date, string id, double rate, string OwnerUsername, double balance, Date accumulationDate, double accumulationValue, double accumulationSum, multimap<Date, LogInfo> log):Account(date,id,rate,TypeSavings,OwnerUsername,balance,accumulationDate,accumulationValue,accumulationSum,log)
+SavingsAccount::SavingsAccount(Date date, string id, double rate, string OwnerUsername, double balance, Date accumulationDate, double accumulationValue, double accumulationSum, multimap<Date, LogInfo> log,LogMaster *logmgr):Account(date,id,rate,TypeSavings,OwnerUsername,balance,accumulationDate,accumulationValue,accumulationSum,log,logmgr)
 {
 
 }
 //构造函数 
-SavingsAccount::SavingsAccount(Date date,string id,double rate,string OwnerUsername):Account(date,id,rate,TypeSavings,OwnerUsername)
+SavingsAccount::SavingsAccount(Date date,string id,double rate,string OwnerUsername,LogMaster *logmgr):Account(date,id,rate,TypeSavings,OwnerUsername,logmgr)
 {
 
 }	

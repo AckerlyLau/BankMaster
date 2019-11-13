@@ -6,6 +6,10 @@
 #include "LogInfo.h"
 #include <utility>
 #include "Accumulator.h"
+#include <QMainWindow>
+#include "LogMaster.h"
+namespace Ui { class MainWindow; }
+
 /***********************************
 Account.h
 Account类的声明 
@@ -24,13 +28,14 @@ class Account
 		Date lastRecordedDate;
 		int accountType;
 		multimap<Date,LogInfo> Log;
-		string OwnerUsername;
+        string OwnerUsername;
+        LogMaster *logmgr;
 	public:
 		friend class System;
 		friend class User;
 		//构造函数
-		Account(Date date,string id,double rate,int accountType,string OwnerUsername,double balance , Date accumulationDate, double accumulationValue, double accumulationSum,multimap<Date,LogInfo> log);
-		Account(Date date,string id,double rate,int accountType,string OwnerUsername);
+        Account(Date date,string id,double rate,int accountType,string OwnerUsername,double balance , Date accumulationDate, double accumulationValue, double accumulationSum,multimap<Date,LogInfo> log,LogMaster *logmgr);
+        Account(Date date,string id,double rate,int accountType,string OwnerUsername,LogMaster *logmgr);
 		Account();
 		Account(int accountType);
 		
@@ -71,7 +76,7 @@ class Account
 		virtual void settle(Date date) = 0;
 		
 		//添加日志
-		void AddLog(Date date,double amount,string detail);
+        void AddLog(Date date,double amount,string detail);
 		
 		//某个月按时间排序的账户信息
 		void ShowLogTime(Date date);

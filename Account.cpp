@@ -10,30 +10,40 @@
 #include <vector>
 #include <algorithm>
 #include <cmath>
+#include <QMainWindow>
+namespace Ui { class MainWindow; }
+
 using namespace std;
 const int TypeCredit = 1;
 const int TypeSavings = 0;
 
 //构造函数
-Account::Account(Date date, string id, double rate, int accountType, string OwnerUsername, double balance, Date accumulationDate, double accumulationValue, double accumulationSum,  multimap <Date, LogInfo> log) : accumulation(accumulationDate,accumulationValue,accumulationSum)
+Account::Account(Date date, string id, double rate, int accountType, string OwnerUsername, double balance, Date accumulationDate, double accumulationValue, double accumulationSum,  multimap <Date, LogInfo> log,LogMaster *logmgr) : accumulation(accumulationDate,accumulationValue,accumulationSum)
 {
+    //Ui::MainWindow *uii = logmgr->ui;
 	lastRecordedDate = date;
 	this -> id = id;
 	this -> rate = rate;
 	this -> balance = balance;
 	this -> accountType = accountType;
 	this -> OwnerUsername = OwnerUsername;
+    this -> logmgr = logmgr;
+
 	Log = log;
+
 }
 //构造函数 
-Account::Account(Date date,string id,double rate,int accountType,string OwnerUsername):accumulation(date,0,accountType)
+Account::Account(Date date,string id,double rate,int accountType,string OwnerUsername,LogMaster *logmgr):accumulation(date,0,accountType)
 {
 	lastRecordedDate = date;
 	this -> id = id;
 	this -> rate = rate;
 	balance = 0;
 	this -> accountType = accountType;
+    this -> logmgr = logmgr;
+
 	this -> OwnerUsername = OwnerUsername;
+
 }	
 
 //默认构造函数 
@@ -44,7 +54,8 @@ Account::Account() : accumulation(Date(2019, 1, 1), 0,accountType)
 	this -> rate = 0;
 	balance = 0;
 	accountType = TypeSavings;
-	OwnerUsername = "NULL";
+    OwnerUsername = "NULL";
+    logmgr = nullptr;
 }	
 
 //亚默认构造函数
@@ -55,6 +66,7 @@ Account::Account(int accountType) : accumulation(Date(2019, 1, 1), 0,accountType
 	this -> rate = 0;
 	balance = 0;
 	this -> accountType = accountType;
+    logmgr = nullptr;
 }	
 
 //进行账户变动
@@ -74,9 +86,14 @@ void Account::Process(Date date)
 {
 	if (date < getLastRecordedDate())
 		throw AccountException("日期时间错误，无法时光倒流", this);
-	//cout <<"Debug:DataUpdate " <<lastDate << date << endl;
-	date = date + 1;
-	for (Date i = getLastRecordedDate()+1;i < date; i = i + 1)
+    //cout <<"Debug:DataUpdate "  << date << endl;
+    //date.setDate((date + 1).getYear(),(date + 1).getMonth(),(date + 1).getDay());
+    //cout <<"Debug:DataUpdate2 "  << date << endl;
+   // Date dat;
+    //dat.setDate(date.getYear(),date.getMonth(),date.getDay());
+    //dat.setDate((date + 1).getYear(),(date + 1).getMonth(),(date + 1).getDay());
+    date = date + 1;
+    for (Date i = getLastRecordedDate()+1;i < date; i = i + 1)
 	{
 		settle(i);
 		//cout << i << endl;
@@ -117,8 +134,7 @@ double Account::getRate()
 void Account::AddLog(Date date,double amount,string detail)
 {
 //	cout <<"Debug:Account::AddLog"<<endl;
-	LogInfo log(date,amount,detail);
-	Log.insert(make_pair(date,log));
+    logmgr -> AddLog(Log,date,amount,detail,getId());
 	//cout <<"Debug:Account::AddLog finished"<<endl;
 }
 
