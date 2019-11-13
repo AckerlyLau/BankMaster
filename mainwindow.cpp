@@ -10,15 +10,36 @@
 #include <string>
 #include <Account.h>
 #include "logindialog.h"
+#include "LogMaster.h"
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    os = new System(ui);
+    logmgr = new LogMaster(ui);
+    os = new System(ui,logmgr);
     os -> UIStart();
     flagForAccountTypeComobox = true;
+    ui->LogComboBox->addItem("按时间排序");
+    ui->LogComboBox->addItem("按金额排序");
     RenewUserInfo();
+    ShowUserWarningsInfo();
+}
+void MainWindow::ShowUserWarningsInfo()
+{
+    try
+    {
+        vector<string> res;
+        res = os->getCurrentUser()->GUIShowWarningInfo();
+        for(vector<string> :: iterator it = res.begin() ; it != res.end() ; it ++)
+        {
+            logmgr -> AddLog(it->data(),true);
+        }
+    }
+    catch (const exception &e)
+    {
+        logmgr -> AddLog(this,"系统",e.what(),"warning");
+    }
 }
 void MainWindow::RenewUserInfo()
 {
@@ -33,6 +54,7 @@ void MainWindow::RenewUserInfo()
         curtime = time(NULL);
         tm *timeinfo = localtime(&curtime);
         ui->TodayEdit->setDate(QDate(timeinfo ->tm_year+1900,timeinfo->tm_mon+1,timeinfo ->tm_mday));
+        ui->LogDateEdit->setDate(QDate(timeinfo ->tm_year+1900,timeinfo->tm_mon+1,timeinfo ->tm_mday));
         os->setToday(Date(timeinfo ->tm_year+1900,timeinfo ->tm_mon+1,timeinfo ->tm_mday));
 
         //初始化用户信息显示
@@ -73,12 +95,14 @@ void MainWindow::RenewUserInfo()
         //ui->tableWidget->tableHeader<<"ID"<<"账户类型"<<"";
         //ui->tableWidget->
         */
+
     }
     catch(const std::exception &e)
     {
         string str  = "刷新页面信息时发生错误:";
         str += e.what();
-        QMessageBox::warning(this,tr("Warning"),tr(str.c_str()),QMessageBox::Yes);
+        logmgr -> AddLog(this,"系统",str.c_str(),"warning");
+        //QMessageBox::warning(this,tr("Warning"),tr(str.c_str()),QMessageBox::Yes);
     }
 }
 MainWindow::~MainWindow()
@@ -166,7 +190,8 @@ void MainWindow::RenewAccountInfo()
     {
         string str  = "刷新账户信息时发生错误:";
         str += e.what();
-        QMessageBox::warning(this,tr("Warning"),tr(str.c_str()),QMessageBox::Yes);
+        logmgr -> AddLog(this,"系统",str.c_str(),"warning");
+        //QMessageBox::warning(this,tr("Warning"),tr(str.c_str()),QMessageBox::Yes);
     }
 }
 
@@ -192,12 +217,14 @@ void MainWindow::on_SubmitTransButton_clicked()
         string balance ="操作成功，当前余额:";
         balance += to_string(os->getCurrentUser()->getCurrentAccount()->getBalance());
         balance = balance.substr(0,balance.find('.')+3);
-        QMessageBox::information(this,"操作成功",balance.c_str());
+        logmgr -> AddLog(this,"系统",balance.c_str(),"information",true,false);
+       // QMessageBox::information(this,"操作成功",balance.c_str());
         RenewAccountInfo();
     }
     catch(const std::exception& e)
     {
-        QMessageBox::warning(this,"操作失败",e.what());
+        logmgr -> AddLog(this,"系统",("操作失败:" + string(e.what())).c_str(),"warning");
+        //QMessageBox::warning(this,"操作失败",e.what());
     }
 }
 
@@ -206,4 +233,32 @@ void MainWindow::on_actionLogout_triggered()
    LoginDialog login(os);
    login.exec();
    RenewUserInfo();
+   ShowUserWarningsInfo();
 }
+void MainWindow::on_LogButton_clicked()
+{
+    try
+    {
+        string str = ui->LogDateEdit->text().toStdString();
+        str += "-1";
+        Date date(str);
+        vector<string> res;
+        if(ui->LogComboBox->currentText() == "按时间排序")
+            res = os->getCurrentUser()->getCurrentAccount()->ShowLogTime(date);
+        else
+            res = os->getCurrentUser()->getCurrentAccount()->ShowLogAmount(date);
+        str = to_string(date.getYear()) + "年" + to_string(date.getMonth()) +"月 的" +ui->LogComboBox->currentText().toStdString() +"日志查询结果如下:";
+        ui->LogInquireTextBrowser->clear();
+        ui->LogInquireTextBrowser->append(str.c_str());
+        for(vector<string> :: iterator it= res.begin() ; it != res.end();it ++)
+        {
+            ui->LogInquireTextBrowser->append(it->data());
+        }
+        //ui->LogInquireTextBrowser->append(str.c_str());
+    }
+    catch(const exception &e)
+    {
+        logmgr ->AddLog(this,"系统",(string("查询出错:") + e.what()).c_str(),"warning",true,false);
+    }
+}
+

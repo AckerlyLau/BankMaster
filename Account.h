@@ -79,9 +79,9 @@ class Account
         void AddLog(Date date,double amount,string detail);
 		
 		//某个月按时间排序的账户信息
-		void ShowLogTime(Date date);
+        vector<string> ShowLogTime(Date date);
 
 		//某个月按照交易金额从小到大排序的账户查询信息
-		void ShowLogAmount(Date date);	
+        vector<string> ShowLogAmount(Date date);
 };
 #endif

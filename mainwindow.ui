@@ -247,11 +247,17 @@
       <height>20</height>
      </rect>
     </property>
+    <property name="displayFormat">
+     <string>yyyy-M-d</string>
+    </property>
+    <property name="calendarPopup">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="nowDateLabel">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>30</x>
       <y>20</y>
       <width>71</width>
       <height>16</height>
@@ -267,7 +273,7 @@
      <string>当前日期:</string>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBox_4">
+   <widget class="QTabWidget" name="LogTabWidget">
     <property name="geometry">
      <rect>
       <x>260</x>
@@ -276,18 +282,103 @@
       <height>211</height>
      </rect>
     </property>
-    <property name="title">
-     <string>日志信息</string>
+    <property name="currentIndex">
+     <number>1</number>
     </property>
-    <widget class="QTextBrowser" name="LogTextBrowser">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>20</y>
-       <width>431</width>
-       <height>181</height>
-      </rect>
-     </property>
+    <widget class="QWidget" name="InstantLogTab">
+     <attribute name="title">
+      <string>实时日志</string>
+     </attribute>
+     <widget class="QTextBrowser" name="LogTextBrowser">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>451</width>
+        <height>171</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="LogInquireTab">
+     <attribute name="title">
+      <string>日志查询</string>
+     </attribute>
+     <widget class="QTextBrowser" name="LogInquireTextBrowser">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>441</width>
+        <height>141</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QFrame" name="frame">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>341</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QPushButton" name="LogButton">
+       <property name="geometry">
+        <rect>
+         <x>270</x>
+         <y>0</y>
+         <width>71</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>查询</string>
+       </property>
+      </widget>
+      <widget class="QDateEdit" name="LogDateEdit">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>0</y>
+         <width>91</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="displayFormat">
+        <string>yyyy-M</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_6">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>0</y>
+         <width>61</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>选择日期：</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="LogComboBox">
+       <property name="geometry">
+        <rect>
+         <x>180</x>
+         <y>0</y>
+         <width>81</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
     </widget>
    </widget>
   </widget>

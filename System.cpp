@@ -38,23 +38,25 @@ System::~System()
     }
     catch (const exception &e)
     {
-
-        QMessageBox::warning(nullptr,"数据保存失败",e.what());
+        logmgr -> AddLog(nullptr,"系统",(string("数据保存失败:") + e.what()).c_str(),"warning");
+        //QMessageBox::warning(nullptr,"数据保存失败",e.what());
     }
-    QMessageBox::information(nullptr,"数据保存",info.c_str());
+    logmgr -> AddLog(nullptr,"系统",info.c_str(),"information");
+    //QMessageBox::information(nullptr,"数据保存",info.c_str());
 
 }
-System::System(Ui::MainWindow *ui)
+System::System(Ui::MainWindow *ui,LogMaster * logmgr)
 {
     cout << "System initing......" << endl;
     DataBaseFile = "DataBase.txt";
     CurrentUser = nullptr;
     Today = Date(2019,1,1);
     this -> ui = ui;
-    logmgr = new LogMaster(ui);
+    this -> logmgr = logmgr;
     string info;
     info = ReadFile();
-    QMessageBox::information(nullptr,"读档",info.c_str());
+    logmgr -> AddLog(nullptr,"系统",info.c_str(),"information",false,true);
+    //QMessageBox::information(nullptr,"读档",info.c_str());
 }
 
 void System::setToday(Date day)

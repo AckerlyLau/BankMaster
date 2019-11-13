@@ -140,13 +140,21 @@ void Account::AddLog(Date date,double amount,string detail)
 
 
 //某个月按时间排序的账户信息
-void Account::ShowLogTime(Date date)
+vector<string> Account::ShowLogTime(Date date)
 {
-	cout << date.getYear() << " 年 " << date.getMonth() << " 月 的账户日志如下(按time排序):" << endl;
+    vector<string> res;
+    //cout << date.getYear() << " 年 " << date.getMonth() << " 月 的账户日志如下(按time排序):" << endl;
 	for(map<Date,LogInfo>::iterator it  = Log.lower_bound(date);it != Log.upper_bound(Date(date.getYear(),date.getMonth(),31));it ++)
 	{
-		cout << "时间: " <<it -> second.getDate().TransferToString() <<" 变动: "<<it -> second.getAmount() <<" 备注:" << it->second.getDetail() <<endl;
-	}
+        //cout << "时间: " <<it -> second.getDate().TransferToString() <<" 变动: "<<it -> second.getAmount() <<" 备注:" << it->second.getDetail() <<endl;
+        cout << "时间: " <<it -> second.getDate().TransferToString() <<" 变动: "<<it -> second.getAmount() <<" 备注:" << it->second.getDetail() <<endl;
+        string str;
+        string balance = to_string(it->second.getAmount());
+        balance = balance.substr(0,balance.find('.')+3);
+        str = "时间:"+it->second.getDate().TransferToString()+" 变动:" + balance + "备注: " + it->second.getDetail();
+        res.push_back(str);
+    }
+    return res;
 }	
 
 bool cmp(LogInfo &L1,LogInfo &L2)
@@ -155,10 +163,11 @@ bool cmp(LogInfo &L1,LogInfo &L2)
 }
 
 //某个月按照交易金额从小到大排序的账户查询信息
-void Account::ShowLogAmount(Date date)
+vector<string> Account::ShowLogAmount(Date date)
 {
-	cout << date.getYear() << " 年 " << date.getMonth() << " 月 的账户日志如下(按amount排序):" << endl;
-	
+    //cout << date.getYear() << " 年 " << date.getMonth() << " 月 的账户日志如下(按amount排序):" << endl;
+    vector<string> res;
+
 	vector<LogInfo> temp;
 	for(multimap<Date,LogInfo>::iterator it  = Log.lower_bound(date);it != Log.upper_bound(Date(date.getYear(),date.getMonth(),31));it ++)
 	{
@@ -168,8 +177,14 @@ void Account::ShowLogAmount(Date date)
 	sort(temp.begin(),temp.end(),cmp);
 	for(vector<LogInfo>::iterator it  = temp.begin();it != temp.end();it ++)
 	{
-		cout << "时间: " <<it ->getDate().TransferToString() <<" 变动: "<<it -> getAmount() <<" 备注:" << it->getDetail() <<endl;
-	}
+        //cout << "时间: " <<it ->getDate().TransferToString() <<" 变动: "<<it -> getAmount() <<" 备注:" << it->getDetail() <<endl;
+        string str;
+        string balance = to_string(it->getAmount());
+        balance = balance.substr(0,balance.find('.')+3);
+        str = "时间:" + it->getDate().TransferToString() +"变动: " + balance + " 备注:" + it->getDetail() ;
+        res.push_back(str);
+    }
+    return res;
 }
 
 

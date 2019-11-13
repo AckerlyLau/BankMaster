@@ -46,6 +46,8 @@ class User
         void ShowAllAccount();
 		//显示警告信息，用于刚登录时显示
         void ShowWarningInfo();
+        vector<string> GUIShowWarningInfo();
+
         //取款
         void Deposit(Date date,double amount);
         //存款

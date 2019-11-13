@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "System.h"
+#include "LogMaster.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -30,8 +31,11 @@ private slots:
     void receiveData(QString data);
     void on_actionLogout_triggered();
     void RenewUserInfo();
+    void ShowUserWarningsInfo();
+    void on_LogButton_clicked();
 private:
     Ui::MainWindow *ui;
     System *os;
+    LogMaster *logmgr;
 };
 #endif // MAINWINDOW_H

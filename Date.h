@@ -15,6 +15,7 @@ class Date
     public:
         Date();//默认构造函数
         Date(int year,int month,int day);//构造函数年月日
+        Date(string str);
        // Date(Date &date);
         int getYear()const;//返回year
         int getMonth()const;//返回month

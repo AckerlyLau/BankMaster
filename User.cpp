@@ -126,11 +126,11 @@ void User::ShowWarningInfo()
     {
 
         if(it ->second ->getBalance() < 0)
-        {   
+        {
             if(NeedPayOff == false)
             {
-				cout << "---------------------------------------------------------" << endl;
-				cout << "****名下全部余额: " << getTotal() << endl;
+                cout << "---------------------------------------------------------" << endl;
+                cout << "****名下全部余额: " << getTotal() << endl;
                 cout <<"****待还款："<<endl;
             }
             cout <<"** 账户:" << it -> second ->getId() <<" 待还款额度:" << -it -> second -> getBalance() << endl;
@@ -141,7 +141,7 @@ void User::ShowWarningInfo()
     if(NeedPayOff)
     {
         cout <<"****共需还款额度:" << -payoff << endl;
-        cout <<"---------------------------------------------------------"<<endl; 
+        cout <<"---------------------------------------------------------"<<endl;
     }
 
     double TotalAmount = 0;
@@ -157,8 +157,57 @@ void User::ShowWarningInfo()
         cout << "** 账户: " <<it ->second ->getId() <<" 收支:" << amount << endl;
     }
     cout <<"****近期总收/支:" << TotalAmount << endl;
-    cout <<"---------------------------------------------------------"<<endl; 
+    cout <<"---------------------------------------------------------"<<endl;
 
+}
+vector<string> User::GUIShowWarningInfo()
+{
+    vector<string> res;
+    double payoff = 0;
+    bool NeedPayOff = false;
+    res.push_back("--------------账户状态提醒----------------------");
+    for(map<string,Account*>::iterator it  =  userAccount.begin();it != userAccount.end();it++)
+    {
+
+        if(it ->second ->getBalance() < 0)
+        {
+            if(NeedPayOff == false)
+            {
+                res.push_back(getUsername() +" 您的信用卡累计待还款账目如下,请记得及时还款");
+            }
+            string balance = to_string(-it -> second -> getBalance());
+            balance = balance.substr(0,balance.find('.')+3);
+            res.push_back("** 账户:" + it -> second ->getId() +" 待还款额度:" + balance);
+            NeedPayOff = true;
+            payoff += it ->second ->getBalance();
+        }
+    }
+    if(NeedPayOff)
+    {
+        string balance = to_string( -payoff);
+        balance = balance.substr(0,balance.find('.')+3);
+        res.push_back("****共需还款额度:" + balance );
+    }
+    res.push_back("----------------------------------------------");
+    double TotalAmount = 0;
+    res.push_back("****您的最近收入/支出统计如下：");
+    for(map<string,Account*>::iterator it  =  userAccount.begin();it != userAccount.end();it++)
+    {
+        double amount = 0;
+        for(multimap<Date,LogInfo>::iterator ite = it -> second ->Log.lower_bound(Date(it -> second ->getLastRecordedDate().getYear(),it -> second ->getLastRecordedDate().getMonth(),1));ite != it -> second -> Log.end();ite++)
+        {
+            amount += ite -> second.getAmount();
+        }
+        TotalAmount += amount;
+        string balance = to_string( amount);
+        balance = balance.substr(0,balance.find('.')+3);
+        res.push_back( "** 账户: " +it ->second ->getId() +" 收支:" + balance );
+    }
+    string balance = to_string(TotalAmount);
+    balance = balance.substr(0,balance.find('.')+3);
+    res.push_back("****近期总收/支:" + balance );
+    res.push_back( "--------------提醒结束--------------------------");
+    return res;
 }
 
 //取款

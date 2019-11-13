@@ -25,7 +25,7 @@ class System
     public:
         System();
 		~System();
-        System(Ui::MainWindow *ui);
+        System(Ui::MainWindow *ui,LogMaster *logmgr);
 		//查找用户 按照username查找用户
         bool FindUser(string username,User *&usr);
         void setToday(Date day);

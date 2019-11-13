@@ -15,6 +15,21 @@ Date::Date(int year, int month, int day)
 {
     setDate(year, month, day);
 }
+Date::Date(string str)
+{
+    int sum = 0;
+    for(sum = 0;str.find("-")!= str.npos;sum++)
+        str.replace(str.find("-"),1," ");
+    stringstream ss;
+    ss << str;
+    int year ,month,day;
+    ss >> year >> month >> day;
+    string sss;
+    ss >> sss;
+    if(sss.size() != 0 || year == 0 || month == 0 || day == 0 || sum != 2)
+        throw runtime_error("日期输入有误");
+    setDate(year,month,day);
+}
 /*
 Date::Date(Date &date)
 {
